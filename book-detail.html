@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Λεπτομέρειες Βιβλίου</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        .book-detail-container {
+            display: flex;
+            flex-wrap: wrap;
+            background: #fff;
+            padding: 20px;
+            margin-top: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .book-image {
+            max-width: 300px;
+            margin-right: 20px;
+        }
+        .book-description-container {
+            flex: 1;
+        }
+        .book-title {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .book-description {
+            margin-bottom: 20px;
+        }
+        .availability {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .btn-container {
+            margin-bottom: 20px;
+        }
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+        .message {
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .message.success {
+            color: green;
+        }
+        .message.error {
+            color: red;
+        }
+        .back-btn {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #007bff;
+        }
+        .back-btn:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center">Λεπτομέρειες Βιβλίου</h1>
+        
+        <div class="book-detail-container">
+            <!-- Εικόνα Βιβλίου -->
+            <img src="images.png" alt="Το Δέντρο με τα Ρόδα" class="book-image">
+
+            <!-- Λεπτομέρειες Βιβλίου -->
+            <div class="book-description-container">
+                <h2 class="book-title">Το Δέντρο με τα Ρόδα</h2>
+                <p><strong>Συγγραφέας:</strong> Ιωάννης Παπαδόπουλος</p>
+                <p class="book-description"><strong>Περιγραφή:</strong> Ένα συναρπαστικό βιβλίο φαντασίας για την εξερεύνηση του κόσμου της μαγείας και των μυστικών.</p>
+                <p class="availability">Διαθέσιμα Αντίτυπα: <span id="availability">5</span></p>
+                <div class="btn-container">
+                    <button type="button" class="btn btn-custom" id="borrowBtn">Δανεισμός</button>
+                </div>
+                <p id="message" class="message"></p>
+                <a href="available-books.html" class="back-btn">Επιστροφή στα διαθέσιμα βιβλία</a>
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="bookId" value="12345"> <!-- Replace 12345 with the actual book ID -->
+
+    <script>
+        document.getElementById("borrowBtn").addEventListener("click", function() {
+            let availability = document.getElementById("availability");
+            let currentAvailability = parseInt(availability.textContent);
+            let bookId = document.getElementById("bookId").value;
+
+            if (currentAvailability > 0) {
+                // Make a request to the server to decrease the availability
+                fetch(`borrow-book.php?id=${bookId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Update the availability in the UI
+                            availability.textContent = data.new_quantity;
+                            document.getElementById("message").textContent = "Το βιβλίο δανείστηκε επιτυχώς!";
+                            document.getElementById("message").className = "message success";  // Show success message
+                        } else {
+                            document.getElementById("message").textContent = data.message;
+                            document.getElementById("message").className = "message error";  // Show error message
+                        }
+                    })
+                    .catch(error => {
+                        document.getElementById("message").textContent = "Σφάλμα κατά την επικοινωνία με τον εξυπηρετητή.";
+                        document.getElementById("message").className = "message error";
+                    });
+            } else {
+                document.getElementById("message").textContent = "Δεν υπάρχουν διαθέσιμα αντίτυπα.";
+                document.getElementById("message").className = "message error";
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+body {
+    background-color: black;
+    color: white;
+}
+
+h1, h2 {
+    font-family: 'Arial', sans-serif;
+    color: white;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
+}
+
+.card {
+    margin: 15px;
+    background-color: #333;
+    border-radius: 10px;
+    color: white;
+}
+
+.card-body {
+    background-color: #444;
+    border-radius: 10px;
+}
+
+.card-title {
+    color: #ffd700;
+}
+
+.card-text {
+    color: #ccc;
+}
+
+.btn-primary {
+    background-color: #ff5722;
+    border-color: #ff5722;
+}
+
+.btn-primary:hover {
+    background-color: #e64a19;
+    border-color: #e64a19;
+}

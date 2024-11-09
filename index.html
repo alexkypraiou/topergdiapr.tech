@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ηλεκτρονικό Κατάστημα Βιβλίων</title>
+    <!-- Σύνδεση με το Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Προσαρμοσμένο στυλ -->
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Προσθήκη Icon -->
+    <link rel="icon" href="img/favicon.ico">
+    <style>
+        /* Προσαρμοσμένο στυλ για σκοτεινό θέμα */
+        body {
+            background-color: #121212;
+            color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+
+        .card-body {
+            padding: 1.25rem;
+            background-color: #1e1e1e;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #f0f0f0;
+        }
+
+        .card-text {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        .nav-link {
+            font-weight: 600;
+            color: #f0f0f0;
+        }
+
+        .nav-link:hover {
+            color: #007bff;
+        }
+
+        /* Εφέ Hover για τις κάρτες */
+        .card:hover {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transform: translateY(-5px);
+            transition: all 0.3s ease;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background-image: url('pexels-rickyrecap-1907785.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 100px 0;
+        }
+
+        .hero-section h1 {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .hero-section p {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        /* Κατηγορίες Βιβλίων */
+        .category-card {
+            background-color: #333;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .category-card:hover {
+            transform: scale(1.05);
+        }
+
+        /* Κουμπιά */
+        .btn-custom {
+            background-color: #007bff;
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn-custom:hover {
+            background-color: #0056b3;
+        }
+
+        /* Navbar Customization */
+        .navbar {
+            background-color: #212121;
+        }
+
+        .navbar-brand {
+            color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        /* Στυλ για το πεδίο αναζήτησης και τα αποτελέσματα */
+        .search-container {
+            margin: 20px;
+            position: relative;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        #suggestions {
+            position: absolute;
+            top: 35px;
+            width: 100%;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .suggestion-item {
+            padding: 10px;
+            cursor: pointer;
+        }
+
+        .suggestion-item:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand" href="index.html">
+            <img src="hmu-removebg-preview.png" alt="Logo"> Βιβλιοθήκη Τμήματος
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.html">Αρχική</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <h1>Καλώς ήρθατε στην Βιβλιοθήκη Δανεισμού του Τμήματος Ηλεκτρονικών Μηχανικών!</h1>
+        <p>Ανακαλύψτε και δανειστείτε τα αγαπημένα σας βιβλία με εύκολο και γρήγορο τρόπο.</p>
+        <a href="#categories" class="btn btn-custom btn-lg">Ανακαλύψτε τα Βιβλία μας</a>
+    </section>
+
+    <!-- Αναζήτηση Βιβλίων -->
+    <div class="search-container">
+        <input type="text" id="searchInput" onkeyup="searchBooks()" placeholder="Αναζητήστε βιβλία..." class="form-control">
+        <div id="suggestions"></div>
+        <p id="noResults" style="display:none;">Δεν βρέθηκαν αποτελέσματα για αυτό το όνομα.</p>
+    </div>
+
+    <!-- Κατηγορίες Βιβλίων -->
+    <div id="categories" class="container mt-5">
+        <h2 class="text-center mb-4">Κατηγορίες Βιβλίων</h2>
+        <div class="row">
+            <!-- Όλα τα διαθέσιμα βιβλία -->
+            <div class="col-md-4 mb-4">
+                <div class="category-card text-center p-4">
+                    <h4><a href="available-books.html" class="text-white">Όλα τα διαθέσιμα βιβλία</a></h4>
+                    <p>Δείτε τα βιβλία μας σε διάφορες κατηγορίες και θέματα.</p>
+                    <a href="available-books.html" class="btn btn-custom">Δείτε Περισσότερα</a>
+                </div>
+            </div>
+
+            <!-- Σε Προσφορά -->
+            <div class="col-md-4 mb-4">
+                <div class="category-card text-center p-4">
+                    <h4><a href="on-sale-books.html" class="text-white">Εξαμήνου</a></h4>
+                    <p>Βιβλία από όλα τα εξάμηνα!</p>
+                    <a href="on-sale-books.html" class="btn btn-custom">Δείτε </a>
+                </div>
+            </div>
+
+            <!-- Δημοφιλή Βιβλία -->
+            <div class="col-md-4 mb-4">
+                <div class="category-card text-center p-4">
+                    <h4><a href="popular-books.html" class="text-white">Δημοφιλή Βιβλία</a></h4>
+                    <p>Δείτε τα πιο δημοφιλή βιβλία που αγαπούν οι χρήστες μας.</p>
+                    <a href="popular-books.html" class="btn btn-custom">Δείτε Δημοφιλή</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Σύνδεση με το Bootstrap JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Παράδειγμα δεδομένων βιβλίων
+        const books = [
+            { title: 'Το Δέντρο με τα Ρόδα', category: 'Φαντασία' },
+            { title: 'Μυστήριο στον Αέρα', category: 'Θρίλερ' },
+            { title: 'Τεχνολογία στην Πράξη', category: 'Τεχνολογία' },
+        ];
+
+        // Αναζήτηση βιβλίων
+        function searchBooks() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const suggestions = document.getElementById('suggestions');
+            suggestions.innerHTML = ''; // Καθαρίζουμε τα παλιά αποτελέσματα
+            const filteredBooks = books.filter(book => book.title.toLowerCase().includes(query));
+            if (filteredBooks.length === 0) {
+                document.getElementById('noResults').style.display = 'block';
+            } else {
+                document.getElementById('noResults').style.display = 'none';
+                filteredBooks.forEach(book => {
+                    const suggestionItem = document.createElement('div');
+                    suggestionItem.classList.add('suggestion-item');
+                    suggestionItem.textContent = book.title;
+                    suggestions.appendChild(suggestionItem);
+                });
+            }
+        }
+    </script>
+</body>
+</html>
